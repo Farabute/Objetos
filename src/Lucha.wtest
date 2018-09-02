@@ -1,0 +1,32 @@
+import Tp_objetos.*
+
+describe "Tests de Lucha" {
+	test "Si le elimino todos los artefactos, Rolando tiene de valor de lucha 1" {
+		rolando.nuevosArtefactos([])
+		assert.equals(rolando.habilidadParaLucha(), 1)
+	
+	}
+	test "Con todos los artefactos, Rolando tiene de valor de lucha 13" {
+		mascaraOscura.agregarLuchador(rolando)
+		assert.equals(rolando.habilidadParaLucha(), 13)
+	
+	}
+	test "Si cambio a 3 la cantidad de perlas, Rolando tiene de valor de lucha 11" {
+		mascaraOscura.agregarLuchador(rolando)
+		collarDivino.perlas(3)
+		assert.equals(rolando.habilidadParaLucha(), 11)
+	
+	}
+	test "Si cambio el valor base de lucha de Rolando, Rolando queda con valor de lucha 20" {
+		rolando.cambiarValorBaseLucha(8)
+		assert.equals(rolando.habilidadParaLucha(), 20)
+	}
+	test "Si produzco un eclipse, La mascara oscura suma 5 unidades de lucha" {
+		rolando.eclipse()
+		assert.equals(mascaraOscura.unidadesDeLucha(), 5)
+	}
+	test "Si elimino la mascara oscura, Rolando queda con 9 unidades de lucha" {
+		rolando.removerArtefacto(mascaraOscura)
+		assert.equals(rolando.habilidadParaLucha(), 9)
+	}
+}

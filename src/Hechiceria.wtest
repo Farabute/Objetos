@@ -1,0 +1,30 @@
+import Tp_objetos.*
+
+describe "Tests de Hechiceria" {
+	test "Si Rolando tiene el Espectro Malefico, tiene 56 puntos de nivel de hechiceria" {
+		assert.equals(rolando.nivelDeHechiceria(), 56)
+	}
+	test "Si el Espectro Malefico cambia el nombre a 'espectro superrecontramalefico muajajaja', Rolando tiene 125 puntos de nivel de hechiceria" {
+		espectroMalefico.cambiarNombre("espectro superrecontramalefico muajajaja")
+		assert.equals(rolando.nivelDeHechiceria(), 125)
+	}
+	test "Si Rolando tiene el hechizo basico, tiene 35 puntos de nivel de hechiceria" {
+		rolando.cambiarHechizoPreferido(hechizoBasico)
+		assert.equals(rolando.nivelDeHechiceria(), 35)
+	}
+	test "Si Rolando tiene un eclipse, tiene 61 puntos de nivel de hechiceria" {
+		rolando.cambiarHechizoPreferido(espectroMalefico)
+		rolando.eclipse()
+		assert.equals(rolando.nivelDeHechiceria(), 61)
+	}
+	test "El espectro maléfico es poderoso" {
+		assert.that(espectroMalefico.esPoderoso())
+	}
+	test "Si le cambio el nombre a Pepe, el espectro maléfico deja de ser poderoso" {
+		espectroMalefico.cambiarNombre("Pepe")
+		assert.notThat(espectroMalefico.esPoderoso())
+	}
+	test "El hechizo basico no es poderoso" {
+		assert.notThat(hechizoBasico.esPoderoso())
+	}
+}
