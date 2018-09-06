@@ -84,10 +84,16 @@ object libroHechizos{
 	
 	var hechizos = []
 	
-	method aporte() = hechizos.sum({hechizo => hechizo.aporte()})
+	method agregarHechizos(unosHechizos){
+		hechizos.addAll(unosHechizos)
+	}
+	
+	method hechizosPoderosos() = hechizos.filter({hechizo => hechizo.esPoderoso()})
+	
+	method poderHechizo() = (self.hechizosPoderosos()).sum({hechizo => hechizo.poderHechizo()})
 }
 
-object rolando {
+object rolando{
 
 	var hechizoPreferido = espectroMalefico
 	
@@ -117,24 +123,32 @@ object rolando {
 		artefactos.add(artefacto)
 	}
 	
-	method quitarArtefacto(artefacto){
+	method agregarArtefactos(unosArtefactos){
+		artefactos.addAll(unosArtefactos)
+	}
+	
+	method removerTodosLosArtefactos(){
+		artefactos.clear()
+	}
+	
+	method removerArtefacto(artefacto){
 		artefactos.remove(artefacto)
 	}
 	
-	method valorLuchaTotal() = 1 + artefactos.sum({artefacto => artefacto.aporte()})
+	method valorLuchaTotal() = self.valorBaseLucha() + artefactos.sum({artefacto => artefacto.aporte()})
 
 	method mayorHabilidadLucha() = (self.valorLuchaTotal() > self.nivelHechiceria())
 
 	method mejorObjeto() = artefactos.max({artefacto => artefacto.aporte()})
 	
-	method aporteMejorObjeto() = 
-	if(artefactos.contains(espejoFantastico) and artefactos.equals(artefactos.size(),1))
+	method aporteMejorObjeto() =
+	if(artefactos.contains(espejoFantastico) && artefactos.size() == 1)
 	{
 		return 0
 	}
 	else
 	{
-		return (self.mejorObjeto()).aporte()
+		return self.mejorObjeto()
 	}
 
 	method estaCargado() = (artefactos.size() >= 5)

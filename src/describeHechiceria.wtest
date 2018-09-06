@@ -1,0 +1,39 @@
+import rolLuchaYHechiceria.*
+
+describe "tests hechiceria" {
+
+	test "conocer nivel de hechiceria de rolando que deberia ser 56" {
+
+		assert.equals(rolando.nivelHechiceria(),56)
+
+	}
+	
+	test "si cambiamos el nombre de espejoMalefico haciendo que el nivel de hechiceria de rolando quede en 125" {
+		
+		espectroMalefico.cambiarNombre("espectro superrecontramalefico muajajaja")
+		assert.equals(rolando.nivelHechiceria(),125)
+
+	}
+	
+	test "cambiamos el hechizo preferido de rolando haciendo que su nivel de hechiceria quede en 35"{
+		
+		rolando.hechizoPreferido(hechizoBasico)
+		assert.equals(rolando.nivelHechiceria(),35)
+	}
+	
+	test "hacemos que ocurra un eclipse lo cual deberia llevar el nivel de hechiceria de rolando a 61" {
+		fuerzaOscura.eclipse()
+		assert.equals(rolando.nivelHechiceria(),61)
+		}
+		
+	test"verificamos si espectroMalefico es poderoso, deberia ser cierto"{
+		assert.that(espectroMalefico.esPoderoso())
+	}
+	
+	test"cambiamos el nombre de espectroMalefico a pepe lo que deberia hacer que deje de ser poderoso"{
+	espectroMalefico.cambiarNombre("pepe")
+	assert.notThat(espectroMalefico.esPoderoso())
+	}
+
+}
+

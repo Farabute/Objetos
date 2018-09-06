@@ -1,0 +1,62 @@
+import rolLuchaYHechiceria.*
+
+describe "tests de lucha y hechiceria avanzada" {
+
+fixture {
+		espejoFantastico.portador(rolando)
+		collarDivino.numeroPerlas(5)
+		rolando.agregarArtefactos([collarDivino,mascaraOscura,espadaDelDestino,espejoFantastico,armadura])
+	}
+	
+	test "verificamos si rolando esta cargado, debe ser cierto" {
+
+		assert.that(rolando.estaCargado())
+
+	}
+	
+	test"quitamos la armadura de rolando y verificamos si esta cargado, debe ser falso"{
+		rolando.removerArtefacto(armadura)
+		assert.notThat(rolando.estaCargado())
+	}
+	
+	test"el valor de lucha de rolando con todos los objetos debe ser 20"{
+		assert.equals(rolando.valorLuchaTotal(),20)
+	}
+	
+	test"verificamos el valor de lucha de la armadura si tiene como refuerzo una bendicion, debe ser 58"{
+		bendicion.luchador(rolando)
+		armadura.refuerzo(bendicion)
+		assert.equals(armadura.aporte(),58)
+	}
+	
+	test"verificamos el valor de lucha de la armadura si tiene como refuerzo una cota de malla, debe ser 3"{
+		armadura.refuerzo(cotaDeMalla)
+		assert.equals(armadura.aporte(),3)
+	}
+	
+	test"verificamos el valor de lucha de la armadura si tiene como refuerzo un hechizo basico, debe ser 12"{
+		armadura.refuerzo(hechizoBasico)
+		assert.equals(armadura.aporte(),12)
+	}
+		
+	test"verificamos el valor de lucha de la armadura si tiene espectroMalefico como refuerzo, debe ser 19"{
+		armadura.refuerzo(espectroMalefico)
+		assert.equals(armadura.aporte(),19)
+	}
+		
+	test"removemos todos los objetos de rolando dejando solo el espejoFantastico, el valor de lucha debe ser 1"{
+		rolando.removerTodosLosArtefactos()
+		rolando.agregarArtefacto(espejoFantastico)
+		assert.equals(rolando.valorLuchaTotal(),1)
+	}
+	
+ 	test"reemplazamos el hechizo preferido de rolando por un libro de hechizos que contenga espectroMalefico y hechizoBasico, el nivel de lucha deberia ser de 56"{
+		libroHechizos.agregarHechizos([espectroMalefico,hechizoBasico])
+		rolando.hechizoPreferido(libroHechizos)
+		assert.equals(rolando.nivelHechiceria(),56)
+	}
+	
+	test"espejo"{
+		assert.equals(espejoFantastico.aporte(),5)
+	}
+}
