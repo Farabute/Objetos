@@ -1,32 +1,38 @@
 import Tp_objetos.*
 
-describe "Tests de Lucha" {
-	test "Si le elimino todos los artefactos, Rolando tiene de valor de lucha 1" {
-		rolando.nuevosArtefactos([])
-		assert.equals(rolando.habilidadParaLucha(), 1)
+describe "Tests de Lucha"{
 	
+	fixture {
+		collarDivino.perlas(5)
+		rolando.artefactos([collarDivino,mascaraOscura,espadaDelDestino])
 	}
-	test "Con todos los artefactos, Rolando tiene de valor de lucha 13" {
-		mascaraOscura.agregarLuchador(rolando)
-		assert.equals(rolando.habilidadParaLucha(), 13)
 	
+	test "Si se eliminan todos sus artefactos, Rolando tiene su valor base de lucha, 1"{
+		rolando.removerTodosLosArtefactos()
+		assert.equals(rolando.valorBaseLucha(),1)
 	}
-	test "Si cambio a 3 la cantidad de perlas, Rolando tiene de valor de lucha 11" {
-		mascaraOscura.agregarLuchador(rolando)
+	
+	test "Si tiene sus artefactos iniciales, Rolando tiene valor de lucha 13"{
+		assert.equals(rolando.habilidadParaLucha(),13)
+	}
+	
+	test "Si se cambian las perlas del collar a 3, Rolando tiene valor de lucha 11"{
 		collarDivino.perlas(3)
-		assert.equals(rolando.habilidadParaLucha(), 11)
+		assert.equals(rolando.habilidadParaLucha(),11)
+	}
 	
+	test "Si cambia a 8 el valor base de lucha de Rolando, su valor de lucha total es 20"{
+		rolando.valorBaseLucha(8)
+		assert.equals(rolando.habilidadParaLucha(),20)
 	}
-	test "Si cambio el valor base de lucha de Rolando, Rolando queda con valor de lucha 20" {
-		rolando.cambiarValorBaseLucha(8)
-		assert.equals(rolando.habilidadParaLucha(), 20)
+	
+	test "Si produzco un eclipse, la mascara oscura suma 5 unidades de lucha"{
+		fuerzaOscura.eclipse()
+		assert.equals(mascaraOscura.unidadesDeLucha(),5)
 	}
-	test "Si produzco un eclipse, La mascara oscura suma 5 unidades de lucha" {
-		rolando.eclipse()
-		assert.equals(mascaraOscura.unidadesDeLucha(), 5)
-	}
-	test "Si elimino la mascara oscura, Rolando queda con 9 unidades de lucha" {
+	
+	test "Si se elimina la mascara oscura, Rolando tiene valor de lucha 9"{
 		rolando.removerArtefacto(mascaraOscura)
-		assert.equals(rolando.habilidadParaLucha(), 9)
+		assert.equals(rolando.habilidadParaLucha(),9)
 	}
 }

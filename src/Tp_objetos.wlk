@@ -1,42 +1,14 @@
 object rolando {
 	
 	var valorBaseNivel = 3
-	var fuerzaOscura = 5
-	var hechizoPreferido = espectroMalefico
-	var nivelDeHechiceria
+	var property hechizoPreferido = espectroMalefico
 	
-	var valorBaseLucha = 1
-	const artefactos = [espadaDelDestino, collarDivino, mascaraOscura]
+	var property valorBaseLucha = 1
+	var property artefactos = []
 	
-	var habilidadParaLucha
-	
-	method nivelDeHechiceria(){
-		nivelDeHechiceria = (valorBaseNivel * hechizoPreferido.poder()) + fuerzaOscura
-		return nivelDeHechiceria
-	}
-	
-	method cambiarHechizoPreferido(unHechizo){
-		hechizoPreferido = unHechizo	
-	}
-	
-	method eclipse() {
-		fuerzaOscura = fuerzaOscura * 2
-	}
-		
+	method nivelDeHechiceria() = (valorBaseNivel * hechizoPreferido.poder()) + fuerzaOscura.valorFuerzaOscura()
+			
 	method seCreePoderoso() = hechizoPreferido.esPoderoso()
-	
-	method fuerzaOscura() = fuerzaOscura
-	
-	method artefactos() = artefactos
-	
-	method cambiarValorBaseLucha(unValor){
-		valorBaseLucha = unValor	
-	}
-	
-	method nuevosArtefactos(nuevosArtefactos){
-		artefactos.clear()
-		artefactos.addAll(nuevosArtefactos)
-	}
 	
 	method agregarArtefacto(unArtefacto){
 		artefactos.add(unArtefacto)
@@ -46,10 +18,11 @@ object rolando {
 		artefactos.remove(unArtefacto)
 	}
 	
-	method habilidadParaLucha(){
-		habilidadParaLucha = valorBaseLucha + self.valorDeLuchaDeArtefactos()
-		return habilidadParaLucha 
+	method removerTodosLosArtefactos(){
+		artefactos.clear()
 	}
+	
+	method habilidadParaLucha() = valorBaseLucha + self.valorDeLuchaDeArtefactos()
 	
 	method valorDeLuchaDeArtefactos() = artefactos.sum({artefacto => artefacto.unidadesDeLucha()})
 	
@@ -59,37 +32,39 @@ object rolando {
 
 }
 
+object fuerzaOscura{
+	var property valorFuerzaOscura = 5
+	
+	method eclipse() {
+		valorFuerzaOscura =  valorFuerzaOscura*2
+	}
+	
+}
+
 
 /** Hechizos */
 
 object espectroMalefico{
-	var nombre = "Espectro maléfico"
+	var property nombre = "Espectro maléfico"
 	
 	method poder() = nombre.length()
 	
-	method cambiarNombre(unNombre){
-		nombre = unNombre
-	}
+	method unidadesRefuerzo() = self.poder()
 	
 	method esPoderoso() = self.poder() > 15
 }
 
 object hechizoBasico{
-	var poder = 10
+
+	method poder() = 10
 	
-	method poder() = poder
+	method unidadesRefuerzo() = self.poder()
 
 	method esPoderoso() = false
 }
 
 object libroDeHechizos{
-	const hechizos = []
-	var poder
-
-	method nuevosHechizos(nuevosHechizos){
-		hechizos.clear()
-		hechizos.addAll(nuevosHechizos)
-	}
+	var property hechizos = []
 	
 	method agregarHechizo(unHechizo){
 		hechizos.add(unHechizo)
@@ -99,16 +74,16 @@ object libroDeHechizos{
 		hechizos.remove(unHechizo)
 	}
 	
-	method poder(){
-		poder = hechizos.filter({hechizo => hechizo.esPoderoso()}).sum({hechizo => hechizo.poder()})
-		return poder
-	}
+	method hechizosPoderosos() = hechizos.filter({hechizo => hechizo.esPoderoso()})
+	
+	method poder() = (self.hechizosPoderosos()).sum({hechizo => hechizo.poder()})
+	
 }
 
 /**  ¿Qué sucede si el libro de hechizos incluye como hechizo al mismo libro de hechizos?
 
-En principio, se podria agregar sin problema, pero cuando se le pida evaluar el nivel de hechiceria,
-se genera un ciclo infinito, que nunca cortaria de evaluar hasta que se le acabe la memoria.
+En principio, se podría agregar sin problema, pero cuando se le pida evaluar el nivel de hechicería,
+se genera un ciclo infinito, que nunca cortaría de evaluar hasta que se le acabe la memoria.
 
 */
 
@@ -116,70 +91,41 @@ se genera un ciclo infinito, que nunca cortaria de evaluar hasta que se le acabe
 
 
 object espadaDelDestino{
-	var unidadesDeLucha = 3
-	
-	method unidadesDeLucha() = unidadesDeLucha
+	method unidadesDeLucha() = 3
 }
 
 object collarDivino{
-	var perlas = 5
+	var property perlas = 0
 	
-	method perlas(cantidadDePerlas){
-		perlas = cantidadDePerlas
-	}
-	
-	method unidadesDeLucha() = perlas
+	method unidadesDeLucha() = self.perlas()
 }
 
-
-object mascaraOscura{
-	var unidadesDeLucha
-	var luchador = rolando
-	
-	method agregarLuchador(unLuchador){
-		luchador = unLuchador
-	}
-	
-	method unidadesDeLucha() {
-		if (luchador.fuerzaOscura() < 8){
-			unidadesDeLucha = 4
-		} else {
-			unidadesDeLucha = luchador.fuerzaOscura() / 2 
-		}
-		return unidadesDeLucha
-	}
+object mascaraOscura {
+	method unidadesDeLucha() = 4.max(fuerzaOscura.valorFuerzaOscura() / 2)	
 }
 
 object armadura{
 	var unidadesBaseDeLucha = 2
-	var refuerzo = ninguno
-	var unidadesDeLucha
-	
-	method refuerzo(unRefuerzo){
-		refuerzo = unRefuerzo
-	}
-	
-	method unidadesDeLucha() {
-		unidadesDeLucha = unidadesBaseDeLucha + refuerzo.unidadesRefuerzo()
-		return unidadesDeLucha
-	}
+	var property refuerzo = ninguno
+		
+	method unidadesDeLucha() = unidadesBaseDeLucha + refuerzo.unidadesRefuerzo()
 }
 
 object espejoFantastico{
 	var unidadesDeLucha = 0
-	var luchador = rolando
+	var portador
 	var artefactosLuchador = []
 	
-	method agregarLuchador(unLuchador){
-		luchador = unLuchador
+	method portador(unLuchador){
+		portador = unLuchador
 	}
 	
 	method unidadesDeLucha(){
-		artefactosLuchador = luchador.artefactos()
+		artefactosLuchador = portador.artefactos()
 		artefactosLuchador.remove(self)
 		if (!(artefactosLuchador.isEmpty())){
 			unidadesDeLucha = artefactosLuchador.map({artefacto => artefacto.unidadesDeLucha()}).max()
-		} 
+		}
 		return unidadesDeLucha
 	}
 }
@@ -188,46 +134,17 @@ object espejoFantastico{
 
 /* Refuerzos Armadura*/
 
-object cotaDeMalla{
-	var unidadesRefuerzo = 1
-	
-	method unidadesRefuerzo() = unidadesRefuerzo
+object cotaDeMalla{	
+	method unidadesRefuerzo() = 1
 }
 
 
 object bendicion{
-	var luchador = rolando
-	var unidadesRefuerzo
+	var property luchador = rolando
 	
-	method agregarLuchador(unLuchador){
-		luchador = unLuchador
-	}
-	
-	method luchador() = luchador
-	
-	method unidadesRefuerzo(){
-		unidadesRefuerzo = luchador.nivelDeHechiceria()
-		return unidadesRefuerzo
-	}
-}
-
-object hechizo{
-	var hechizo
-	var unidadesRefuerzo
-	
-	method agregarHechizo(unHechizo){
-		hechizo = unHechizo
-	}
-	
-	method unidadesRefuerzo(){
-		unidadesRefuerzo = hechizo.poder()
-		return unidadesRefuerzo
-	}
-	
+	method unidadesRefuerzo() = luchador.nivelDeHechiceria()
 }
 
 object ninguno{
 	method unidadesRefuerzo() = 0
 }
-
-

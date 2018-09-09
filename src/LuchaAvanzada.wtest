@@ -1,43 +1,57 @@
 import Tp_objetos.*
 
-describe "Tests de Lucha y Hechiceria avanzada" {
-	test "Si tiene 5 artefactos, Rolando esta cargado" {
-		rolando.nuevosArtefactos([espadaDelDestino, collarDivino, mascaraOscura,armadura,espejoFantastico])
-		assert.that(rolando.estaCargado())
+describe "Tests de Lucha y Hechiceria Avanzada" {
+
+fixture {
+		espejoFantastico.portador(rolando)
+		collarDivino.perlas(5)
+		rolando.artefactos([collarDivino,mascaraOscura,espadaDelDestino,espejoFantastico,armadura])
 	}
-	test "Si tiene 4 artefactos, Rolando no esta cargado" {
-		rolando.nuevosArtefactos([espadaDelDestino, collarDivino, mascaraOscura,espejoFantastico])
+	
+	test "Si tiene 5 artefactos, Rolando esta cargado" {
+
+		assert.that(rolando.estaCargado())
+
+	}
+	
+	test "Si tiene 4 artefactos, Rolando no esta cargado"{
+		rolando.removerArtefacto(armadura)
 		assert.notThat(rolando.estaCargado())
 	}
-	test "Si tiene los 5 artefactos iniciales, Rolando tiene 20 unidades de lucha" {
-		rolando.nuevosArtefactos([espadaDelDestino, collarDivino, mascaraOscura,armadura,espejoFantastico])
-		assert.equals(rolando.habilidadParaLucha(), 20)
+	
+	test "Si tiene los 5 artefactos iniciales, Rolando tiene 20 unidades de lucha"{
+		assert.equals(rolando.habilidadParaLucha(),20)
 	}
-	test "Si tiene un refuerzo de bendicion la armadura, esta tiene 58 unidades de refuerzo" {
+	
+	test "Si la armadura tiene como refuerzo una bendicion, su valor de lucha es 58"{
+		bendicion.luchador(rolando)
 		armadura.refuerzo(bendicion)
-		assert.equals(armadura.unidadesDeLucha(), 58)
+		assert.equals(armadura.unidadesDeLucha(),58)
 	}
-	test "Si tiene un refuerzo de cota de malla la armadura, esta tiene 3 unidades de refuerzo" {
+	
+	test "Si la armadura tiene como refuerzo una cota de malla, su valor de lucha es 3"{
 		armadura.refuerzo(cotaDeMalla)
-		assert.equals(armadura.unidadesDeLucha(), 3)
+		assert.equals(armadura.unidadesDeLucha(),3)
 	}
-	test "Si tiene un refuerzo de hechizo basico la armadura, esta tiene 12 unidades de refuerzo" {
-		armadura.refuerzo(hechizo)
-		hechizo.agregarHechizo(hechizoBasico)
-		assert.equals(armadura.unidadesDeLucha(), 12)
+	
+	test "Si la armadura tiene como refuerzo un hechizo basico, su valor de lucha es 12"{
+		armadura.refuerzo(hechizoBasico)
+		assert.equals(armadura.unidadesDeLucha(),12)
 	}
-	test "Si tiene un refuerzo de espectro malefico la armadura, esta tiene 19 unidades de refuerzo" {
-		armadura.refuerzo(hechizo)
-		hechizo.agregarHechizo(espectroMalefico)
-		assert.equals(armadura.unidadesDeLucha(), 19)
+		
+	test "Si la armadura tiene como refuerzo al espectro malefico, su valor de lucha es 19"{
+		armadura.refuerzo(espectroMalefico)
+		assert.equals(armadura.unidadesDeLucha(),19)
 	}
-	test "Si tiene solo el espejo, Rolando tiene 1 unidades de lucha" {
-		rolando.nuevosArtefactos([espejoFantastico])
-		assert.equals(rolando.habilidadParaLucha(), 1)
+		
+	test "Si Rolando tiene solo al espejo, tiene 1 unidad de lucha"{
+		rolando.artefactos([espejoFantastico])
+		assert.equals(rolando.habilidadParaLucha(),1)
 	}
-	test "Si usa el libro de hechizos con el espectro malefico y un hechizo basico, Rolando tiene 56 de nivel de hechiceria" {
-		rolando.cambiarHechizoPreferido(libroDeHechizos)
-		libroDeHechizos.nuevosHechizos([espectroMalefico, hechizoBasico])
-		assert.equals(rolando.nivelDeHechiceria(), 56)
+	
+ 	test "Si Rolando usa el libro de hechizos con el espectro malefico y un hechizo basico, tiene 56 de nivel de hechiceria"{
+		libroDeHechizos.hechizos([espectroMalefico,hechizoBasico])
+		rolando.hechizoPreferido(libroDeHechizos)
+		assert.equals(rolando.nivelDeHechiceria(),56)
 	}
 }
