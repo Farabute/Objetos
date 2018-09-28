@@ -1,34 +1,39 @@
 object rolando {
-	
-	var valorBaseNivel = 3
+
+	var property valorBaseNivel = 3
 	var property hechizoPreferido = espectroMalefico
 	
 	var property valorBaseLucha = 1
 	var property artefactos = []
 	
-	method nivelDeHechiceria() = (valorBaseNivel * hechizoPreferido.poder()) + fuerzaOscura.valorFuerzaOscura()
+	method nivelDeHechiceria() = (self.valorBaseNivel() * hechizoPreferido.poder()) + fuerzaOscura.valorFuerzaOscura()
 			
-	method seCreePoderoso() = hechizoPreferido.esPoderoso()
+	method seCreePoderoso() = self.hechizoPreferido().esPoderoso()
 	
 	method agregarArtefacto(unArtefacto){
-		artefactos.add(unArtefacto)
+		self.artefactos().add(unArtefacto)
 	}
 	
 	method removerArtefacto(unArtefacto){
-		artefactos.remove(unArtefacto)
+		self.artefactos().remove(unArtefacto)
 	}
 	
 	method removerTodosLosArtefactos(){
-		artefactos.clear()
+		self.artefactos().clear()
 	}
 	
-	method habilidadParaLucha() = valorBaseLucha + self.valorDeLuchaDeArtefactos()
+	method artefactosVinculados() = self.artefactos().filter({artefacto => artefacto.estaVinculado()})
 	
-	method valorDeLuchaDeArtefactos() = artefactos.sum({artefacto => artefacto.unidadesDeLucha()})
+	method artefactosSinVinculo() = self.artefactos().filter({artefacto => !(artefacto.estaVinculado())})
+	
+	
+	method habilidadParaLucha() = self.valorBaseLucha() + self.valorDeLuchaDeArtefactos()
+	
+	method valorDeLuchaDeArtefactos() = self.artefactosVinculados().sum({artefacto => artefacto.unidadesDeLucha(self)}) + self.artefactosSinVinculo().sum({artefacto => artefacto.unidadesDeLucha()})
 	
 	method tieneMayorHabilidadDeLucha() = self.habilidadParaLucha() > self.nivelDeHechiceria()
 	
-	method estaCargado() = artefactos.size() >= 5
+	method estaCargado() = self.artefactos().size() >= 5
 
 }
 
@@ -47,11 +52,13 @@ object fuerzaOscura{
 object espectroMalefico{
 	var property nombre = "Espectro maléfico"
 	
-	method poder() = nombre.length()
+	method poder() = self.nombre().length()
 	
 	method unidadesRefuerzo() = self.poder()
 	
 	method esPoderoso() = self.poder() > 15
+	
+	method estaVinculado() = false
 }
 
 object hechizoBasico{
@@ -61,20 +68,24 @@ object hechizoBasico{
 	method unidadesRefuerzo() = self.poder()
 
 	method esPoderoso() = false
+	
+	method estaVinculado() = false
 }
 
 object libroDeHechizos{
 	var property hechizos = []
 	
+	method hechizosValidos() = self.hechizos().filter({hechizo => !(hechizo == self)})
+	
 	method agregarHechizo(unHechizo){
-		hechizos.add(unHechizo)
+		self.hechizos().add(unHechizo)
 	}
 	
 	method removerHechizo(unHechizo){
-		hechizos.remove(unHechizo)
+		self.hechizos().remove(unHechizo)
 	}
 	
-	method hechizosPoderosos() = hechizos.filter({hechizo => hechizo.esPoderoso()})
+	method hechizosPoderosos() = self.hechizosValidos().filter({hechizo => hechizo.esPoderoso()})
 	
 	method poder() = (self.hechizosPoderosos()).sum({hechizo => hechizo.poder()})
 	
@@ -92,39 +103,50 @@ se genera un ciclo infinito, que nunca cortaría de evaluar hasta que se le acab
 
 object espadaDelDestino{
 	method unidadesDeLucha() = 3
+	method estaVinculado() = false
 }
 
 object collarDivino{
 	var property perlas = 0
 	
 	method unidadesDeLucha() = self.perlas()
+	
+	method estaVinculado() = false
 }
 
 object mascaraOscura {
-	method unidadesDeLucha() = 4.max(fuerzaOscura.valorFuerzaOscura() / 2)	
+	method unidadesDeLucha() = 4.max(fuerzaOscura.valorFuerzaOscura() / 2)
+	method estaVinculado() = false	
 }
 
 object armadura{
-	var unidadesBaseDeLucha = 2
+	var property unidadesBaseDeLucha = 2
 	var property refuerzo = ninguno
+	
+	method unidadesDeLuchadelRefuerzo(portador) = if(self.refuerzo().estaVinculado()){return self.refuerzo().unidadesRefuerzo(portador)}else{return self.refuerzo().unidadesRefuerzo()}
 		
-	method unidadesDeLucha() = unidadesBaseDeLucha + refuerzo.unidadesRefuerzo()
+	method unidadesDeLucha(portador) = self.unidadesBaseDeLucha() + self.unidadesDeLuchadelRefuerzo(portador)
+	
+	method estaVinculado() = true
 }
 
 object espejoFantastico{
 	var unidadesDeLucha = 0
-	var portador
-	var artefactosLuchador = []
+	var property artefactosLuchador = []
 	
-	method portador(unLuchador){
-		portador = unLuchador
-	}
+	method estaVinculado() = true
 	
-	method unidadesDeLucha(){
+	method artefactosVinculados() = self.artefactosLuchador().filter({artefacto => artefacto.estaVinculado()})
+	
+	method artefactosSinVinculo() = self.artefactosLuchador().filter({artefacto => !(artefacto.estaVinculado())})
+	
+	method unidadesDeLuchaDeTodosLosArtefactos(portador) = (self.artefactosVinculados().map({artefacto => artefacto.unidadesDeLucha(portador)}))+(self.artefactosSinVinculo().map({artefacto => artefacto.unidadesDeLucha()}))
+	
+	method unidadesDeLucha(portador){
 		artefactosLuchador = portador.artefactos()
 		artefactosLuchador.remove(self)
 		if (!(artefactosLuchador.isEmpty())){
-			unidadesDeLucha = artefactosLuchador.map({artefacto => artefacto.unidadesDeLucha()}).max()
+			unidadesDeLucha = self.unidadesDeLuchaDeTodosLosArtefactos(portador).max()
 		}
 		return unidadesDeLucha
 	}
@@ -135,16 +157,17 @@ object espejoFantastico{
 /* Refuerzos Armadura*/
 
 object cotaDeMalla{	
+	method estaVinculado() = false
 	method unidadesRefuerzo() = 1
 }
 
 
 object bendicion{
-	var property luchador = rolando
-	
-	method unidadesRefuerzo() = luchador.nivelDeHechiceria()
+	method estaVinculado() = true
+	method unidadesRefuerzo(luchador) = luchador.nivelDeHechiceria()
 }
 
 object ninguno{
+	method estaVinculado() = false
 	method unidadesRefuerzo() = 0
 }
