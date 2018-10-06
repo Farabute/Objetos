@@ -1,10 +1,10 @@
-object rolando {
+class Personaje{
 
-	var property valorBaseNivel = 3
-	var property hechizoPreferido = espectroMalefico
-	
+	var property hechizoPreferido	
 	var property valorBaseLucha = 1
 	var property artefactos = []
+	
+	method valorBaseNivel() = 3
 	
 	method nivelDeHechiceria() = (self.valorBaseNivel() * hechizoPreferido.poder()) + fuerzaOscura.valorFuerzaOscura()
 			
@@ -48,9 +48,8 @@ object fuerzaOscura{
 
 
 /** Hechizos */
-
-object espectroMalefico{
-	var property nombre = "Espectro maléfico"
+class Logos{
+	var property nombre
 	
 	method poder() = self.nombre().length()
 	
@@ -60,6 +59,19 @@ object espectroMalefico{
 	
 	method estaVinculado() = false
 }
+
+
+//object espectroMalefico{
+//	var property nombre = "Espectro maléfico"
+//	
+//	method poder() = self.nombre().length()
+//	
+//	method unidadesRefuerzo() = self.poder()
+//	
+//	method esPoderoso() = self.poder() > 15
+//	
+//	method estaVinculado() = false
+//}
 
 object hechizoBasico{
 
@@ -100,11 +112,11 @@ se genera un ciclo infinito, que nunca cortaría de evaluar hasta que se le acab
 
 /** Artefactos */
 
-
-object espadaDelDestino{
+class Arma{
 	method unidadesDeLucha() = 3
 	method estaVinculado() = false
 }
+
 
 object collarDivino{
 	var property perlas = 0
@@ -114,8 +126,9 @@ object collarDivino{
 	method estaVinculado() = false
 }
 
-object mascaraOscura {
-	method unidadesDeLucha() = 4.max(fuerzaOscura.valorFuerzaOscura() / 2)
+class MascaraOscura {
+	var property indiceDeOscuridad
+	method unidadesDeLucha() = 4.max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
 	method estaVinculado() = false	
 }
 

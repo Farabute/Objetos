@@ -1,7 +1,13 @@
 import Tp_objetos.*
 
 describe "Tests de Hechiceria" {
-
+	const rolando
+	var espectroMalefico
+	fixture {
+		espectroMalefico = new Logos(nombre = "espectro malefico")
+		rolando = new Personaje(hechizoPreferido = espectroMalefico)
+	}
+	
 	test "Si Rolando tiene el espectro malefico, tiene 56 puntos de nivel de hechiceria" {
 
 		assert.equals(rolando.nivelDeHechiceria(),56)

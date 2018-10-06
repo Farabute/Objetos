@@ -1,8 +1,15 @@
 import Tp_objetos.*
 
 describe "Tests de Lucha y Hechiceria Avanzada" {
-
+	const rolando
+	var espectroMalefico
+	var mascaraOscura
+	var espadaDelDestino
 fixture {
+		espectroMalefico = new Logos(nombre = "espectro malefico")
+		rolando = new Personaje(hechizoPreferido = espectroMalefico)
+		mascaraOscura = new MascaraOscura(indiceDeOscuridad = 1)
+		espadaDelDestino = new Arma()
 		collarDivino.perlas(5)
 		rolando.artefactos([collarDivino,mascaraOscura,espadaDelDestino,espejoFantastico,armadura])
 	}
