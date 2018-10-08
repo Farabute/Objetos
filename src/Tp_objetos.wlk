@@ -3,7 +3,7 @@ class Personaje{
 	var property hechizoPreferido	
 	var property valorBaseLucha = 1
 	var property artefactos = []
-	var monedas = 100
+	var property monedas = 100
 	
 	method valorBaseNivel() = 3
 	
