@@ -3,6 +3,7 @@ class Personaje{
 	var property hechizoPreferido	
 	var property valorBaseLucha = 1
 	var property artefactos = []
+	var monedas = 100
 	
 	method valorBaseNivel() = 3
 	
@@ -35,6 +36,15 @@ class Personaje{
 	
 	method estaCargado() = self.artefactos().size() >= 5
 
+	method canjeaHechizo(unHechizo) {
+		if (monedas >= self.costoHechizo(unHechizo)) {
+			monedas -= self.costoHechizo(unHechizo)
+			hechizoPreferido = unHechizo
+		}
+	}
+	
+	method costoHechizo(unHechizo) = 0.max(unHechizo.precio() - self.hechizoPreferido().precio() / 2)
+
 }
 
 object fuerzaOscura{
@@ -51,7 +61,9 @@ object fuerzaOscura{
 class Logos{
 	var property nombre
 	
-	method poder() = self.nombre().length()
+	var property valorMultiplicador
+	
+	method poder() = valorMultiplicador * self.nombre().length()
 	
 	method unidadesRefuerzo() = self.poder()
 	
@@ -60,6 +72,8 @@ class Logos{
 	method estaVinculado() = false
 	
 	method claseHechizo() = true
+	
+	method precio() = self.poder()
 }
 
 
@@ -74,6 +88,8 @@ object hechizoBasico{
 	method estaVinculado() = false
 	
 	method claseHechizo() = true
+	
+	method precio() = self.poder()
 }
 
 class LibroDeHechizos{
@@ -106,6 +122,7 @@ class LibroDeHechizos{
 class Arma{
 	method unidadesDeLucha() = 3
 	method estaVinculado() = false
+	method precio() = 5 * self.unidadesDeLucha()
 }
 
 
@@ -115,11 +132,14 @@ object collarDivino{
 	method unidadesDeLucha() = self.perlas()
 	
 	method estaVinculado() = false
+	
+	method precio() = 2 * self.perlas()
 }
 
 class MascaraOscura {
 	var property indiceDeOscuridad
-	method unidadesDeLucha() = 4.max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
+	var property valorMinimo = 4
+	method unidadesDeLucha() = valorMinimo.max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
 	method estaVinculado() = false	
 }
 
@@ -143,6 +163,8 @@ object espejoFantastico{
 		}
 		return unidadesDeLucha
 	}
+	
+	method precio() = 90
 }
 
 
