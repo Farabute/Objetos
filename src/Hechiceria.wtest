@@ -4,7 +4,7 @@ describe "Tests de Hechiceria" {
 	const rolando
 	var espectroMalefico
 	fixture {
-		espectroMalefico = new Logos(nombre = "espectro malefico")
+		espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
 		rolando = new Personaje(hechizoPreferido = espectroMalefico)
 	}
 	
