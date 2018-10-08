@@ -58,20 +58,10 @@ class Logos{
 	method esPoderoso() = self.poder() > 15
 	
 	method estaVinculado() = false
+	
+	method claseHechizo() = true
 }
 
-
-//object espectroMalefico{
-//	var property nombre = "Espectro maléfico"
-//	
-//	method poder() = self.nombre().length()
-//	
-//	method unidadesRefuerzo() = self.poder()
-//	
-//	method esPoderoso() = self.poder() > 15
-//	
-//	method estaVinculado() = false
-//}
 
 object hechizoBasico{
 
@@ -82,15 +72,21 @@ object hechizoBasico{
 	method esPoderoso() = false
 	
 	method estaVinculado() = false
+	
+	method claseHechizo() = true
 }
 
-object libroDeHechizos{
+class LibroDeHechizos{
 	var property hechizos = []
 	
-	method hechizosValidos() = self.hechizos().filter({hechizo => !(hechizo == self)})
+	method hechizosValidos() = self.hechizos().filter({hechizo => hechizo.claseHechizo()})
 	
 	method agregarHechizo(unHechizo){
 		self.hechizos().add(unHechizo)
+	}
+	
+	method agregarHechizos(unHechizo){
+		self.hechizos().addAll(unHechizo)
 	}
 	
 	method removerHechizo(unHechizo){
@@ -101,14 +97,9 @@ object libroDeHechizos{
 	
 	method poder() = (self.hechizosPoderosos()).sum({hechizo => hechizo.poder()})
 	
+	method claseHechizo() = false
+	
 }
-
-/**  ¿Qué sucede si el libro de hechizos incluye como hechizo al mismo libro de hechizos?
-
-En principio, se podría agregar sin problema, pero cuando se le pida evaluar el nivel de hechicería,
-se genera un ciclo infinito, que nunca cortaría de evaluar hasta que se le acabe la memoria.
-
-*/
 
 /** Artefactos */
 
@@ -130,17 +121,6 @@ class MascaraOscura {
 	var property indiceDeOscuridad
 	method unidadesDeLucha() = 4.max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
 	method estaVinculado() = false	
-}
-
-object armadura{
-	var property unidadesBaseDeLucha = 2
-	var property refuerzo = ninguno
-	
-	method unidadesDeLuchadelRefuerzo(portador) = if(self.refuerzo().estaVinculado()){return self.refuerzo().unidadesRefuerzo(portador)}else{return self.refuerzo().unidadesRefuerzo()}
-		
-	method unidadesDeLucha(portador) = self.unidadesBaseDeLucha() + self.unidadesDeLuchadelRefuerzo(portador)
-	
-	method estaVinculado() = true
 }
 
 object espejoFantastico{
@@ -166,12 +146,23 @@ object espejoFantastico{
 }
 
 
+class Armadura{
+	var property unidadesBaseDeLucha
+	var property refuerzo = ninguno
+	
+	method unidadesDeLuchadelRefuerzo(portador) = if(self.refuerzo().estaVinculado()){return self.refuerzo().unidadesRefuerzo(portador)}else{return self.refuerzo().unidadesRefuerzo()}
+		
+	method unidadesDeLucha(portador) = self.unidadesBaseDeLucha() + self.unidadesDeLuchadelRefuerzo(portador)
+	
+	method estaVinculado() = true
+}
+
 
 /* Refuerzos Armadura*/
 
-object cotaDeMalla{	
+class CotaDeMalla{	
+	var property unidadesRefuerzo
 	method estaVinculado() = false
-	method unidadesRefuerzo() = 1
 }
 
 

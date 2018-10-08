@@ -5,6 +5,7 @@ describe "Tests de Lucha"{
 	var espectroMalefico
 	var mascaraOscura
 	var espadaDelDestino
+
 	fixture {
 		espadaDelDestino = new Arma()
 		espectroMalefico = new Logos(nombre = "espectro malefico")
