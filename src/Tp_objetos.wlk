@@ -70,8 +70,6 @@ class Logos{
 	
 	var property valorMultiplicador
 	
-	var property armadura = 0
-	
 	method poder() = valorMultiplicador * self.nombre().length()
 	
 	method unidadesRefuerzo() = self.poder()
@@ -84,14 +82,14 @@ class Logos{
 	
 	method precio() = self.poder()
 	
-	method precioArmadura() = if(armadura != 0){return armadura.unidadesBaseDeLucha() + self.precio()}else{return 0}
+	method precioVinculado() = true
+	
+	method precioRefuerzo(armadura) = armadura.unidadesBaseDeLucha() + self.precio()
 	
 }
 
 
 object hechizoBasico{
-
-	var property armadura = 0
 	
 	method poder() = 10
 	
@@ -105,7 +103,9 @@ object hechizoBasico{
 	
 	method precio() = self.poder()
 	
-	method precioArmadura() = if(armadura != 0){return armadura.unidadesBaseDeLucha() + self.precio()}else{return 0}
+	method precioVinculado() = true
+	
+	method precioRefuerzo(armadura) = armadura.unidadesBaseDeLucha() + self.precio()
 	
 }
 
@@ -196,7 +196,7 @@ class Armadura{
 	
 	method estaVinculado() = true
 	
-	method precio() = refuerzo.precioArmadura()
+	method precio() = if(refuerzo.precioVinculado()){return refuerzo.precioRefuerzo(self)}else{return refuerzo.precioRefuerzo()}
 }
 
 
@@ -205,18 +205,21 @@ class Armadura{
 class CotaDeMalla{	
 	var property unidadesRefuerzo
 	method estaVinculado() = false
-	method precioArmadura() = unidadesRefuerzo / 2
+	method precioVinculado() = false
+	method precioRefuerzo() = self.unidadesRefuerzo() / 2
 }
 
 
-object bendicion inherits Armadura{
-	override method estaVinculado() = true
+object bendicion{
+	method estaVinculado() = true
+	method precioVinculado() = true
 	method unidadesRefuerzo(luchador) = luchador.nivelDeHechiceria()
-	method precioArmadura() = self.unidadesBaseDeLucha()
+	method precioRefuerzo(armadura) = armadura.unidadesBaseDeLucha()
 }
 
 object ninguno{
 	method estaVinculado() = false
+	method precioVinculado() = false
 	method unidadesRefuerzo() = 0
-	method precioArmadura() = 2
+	method precioRefuerzo() = 2
 }
