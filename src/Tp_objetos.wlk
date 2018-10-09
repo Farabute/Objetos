@@ -209,8 +209,8 @@ class CotaDeMalla{
 }
 
 
-object bendicion{
-	method estaVinculado() = true
+object bendicion inherits Armadura{
+	override method estaVinculado() = true
 	method unidadesRefuerzo(luchador) = luchador.nivelDeHechiceria()
 	method precioArmadura() = self.unidadesBaseDeLucha()
 }
