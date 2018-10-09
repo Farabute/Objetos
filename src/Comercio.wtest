@@ -2,6 +2,7 @@ import Tp_objetos.*
 
 describe "Tests de Comercio" {
 	var alacachulaCachicomula
+	var armaduraConAlacachula
 	const xenia
 	const thor
 	const loki
@@ -10,6 +11,7 @@ fixture{
 	xenia = new Personaje(hechizoPreferido = alacachulaCachicomula)
 	thor = new Personaje(hechizoPreferido = hechizoBasico)
 	loki = new Personaje(hechizoPreferido = hechizoBasico, monedas = 5)
+	armaduraConAlacachula = new Armadura(unidadesBaseDeLucha = 2, refuerzo = alacachulaCachicomula)
 }
 
 	test "El precio del hechizo Alacachula es de 22" {
@@ -62,13 +64,13 @@ fixture{
 		xenia.compraArtefacto(collarDivino)
 		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = ninguno))
 		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = cotaDeMalla))
-		assert.equals(xenia.monedas(), 70.5)
 		assert.equals(xenia.artefactos().size(), 4)
 	}
 	
 	test "Si Thor compra una armadura con bendicion y una armadura reforzada con Alacachula, le quedan 74 monedas" {
 		thor.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = bendicion))
-		thor.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = alacachulaCachicomula))
+		thor.compraArtefacto(armaduraConAlacachula)
+		alacachulaCachicomula.armadura(armaduraConAlacachula)
 		assert.equals(thor.monedas(), 74)
 	}
 	
