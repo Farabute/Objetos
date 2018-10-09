@@ -44,6 +44,13 @@ class Personaje{
 	}
 	
 	method costoHechizo(unHechizo) = 0.max(unHechizo.precio() - self.hechizoPreferido().precio() / 2)
+	
+	method compraArtefacto(unArtefacto) {
+		if (monedas >= unArtefacto.precio()) {
+			monedas -= unArtefacto.precio()
+			self.agregarArtefacto(unArtefacto)
+		}
+	}
 
 }
 
@@ -63,6 +70,8 @@ class Logos{
 	
 	var property valorMultiplicador
 	
+	var property armadura = 0
+	
 	method poder() = valorMultiplicador * self.nombre().length()
 	
 	method unidadesRefuerzo() = self.poder()
@@ -74,11 +83,16 @@ class Logos{
 	method claseHechizo() = true
 	
 	method precio() = self.poder()
+	
+	method precioArmadura() = if(armadura != 0){return armadura.unidadesBaseDeLucha() + self.precio()}else{return 0}
+	
 }
 
 
 object hechizoBasico{
 
+	var property armadura = 0
+	
 	method poder() = 10
 	
 	method unidadesRefuerzo() = self.poder()
@@ -90,6 +104,9 @@ object hechizoBasico{
 	method claseHechizo() = true
 	
 	method precio() = self.poder()
+	
+	method precioArmadura() = if(armadura != 0){return armadura.unidadesBaseDeLucha() + self.precio()}else{return 0}
+	
 }
 
 class LibroDeHechizos{
@@ -115,6 +132,7 @@ class LibroDeHechizos{
 	
 	method claseHechizo() = false
 	
+	method precio() = 10 * self.hechizos().size() + self.poder()
 }
 
 /** Artefactos */
@@ -177,6 +195,8 @@ class Armadura{
 	method unidadesDeLucha(portador) = self.unidadesBaseDeLucha() + self.unidadesDeLuchadelRefuerzo(portador)
 	
 	method estaVinculado() = true
+	
+	method precio() = refuerzo.precioArmadura()
 }
 
 
@@ -185,15 +205,18 @@ class Armadura{
 class CotaDeMalla{	
 	var property unidadesRefuerzo
 	method estaVinculado() = false
+	method precioArmadura() = unidadesRefuerzo / 2
 }
 
 
 object bendicion{
 	method estaVinculado() = true
 	method unidadesRefuerzo(luchador) = luchador.nivelDeHechiceria()
+	method precioArmadura() = self.unidadesBaseDeLucha()
 }
 
 object ninguno{
 	method estaVinculado() = false
 	method unidadesRefuerzo() = 0
+	method precioArmadura() = 2
 }
