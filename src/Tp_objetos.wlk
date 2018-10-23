@@ -7,7 +7,7 @@ class Personaje{
 	
 	method valorBaseNivel() = 3
 	
-	method nivelDeHechiceria() = (self.valorBaseNivel() * hechizoPreferido.poder()) + fuerzaOscura.valorFuerzaOscura()
+	method nivelDeHechiceria() = (self.valorBaseNivel() * self.hechizoPreferido().poder()) + fuerzaOscura.valorFuerzaOscura()
 			
 	method seCreePoderoso() = self.hechizoPreferido().esPoderoso()
 	
@@ -37,17 +37,24 @@ class Personaje{
 	method estaCargado() = self.artefactos().size() >= 5
 
 	method canjeaHechizo(unHechizo) {
-		if (monedas >= self.costoHechizo(unHechizo)) {
-			monedas -= self.costoHechizo(unHechizo)
-			hechizoPreferido = unHechizo
+		if (self.monedas() >= self.costoHechizo(unHechizo)) {
+			self.monedas(self.monedas() - self.costoHechizo(unHechizo))
+			self.hechizoPreferido(unHechizo)
 		}
 	}
 	
 	method costoHechizo(unHechizo) = 0.max(unHechizo.precio() - self.hechizoPreferido().precio() / 2)
 	
+	method restarNMonedas(unNumero){
+		self.monedas(self.monedas() - unNumero)
+	}
+	
+	method podesCostear(unArtefacto) = self.monedas() >= unArtefacto.precio()
+	
+	
 	method compraArtefacto(unArtefacto) {
-		if (monedas >= unArtefacto.precio()) {
-			monedas -= unArtefacto.precio()
+		if (self.podesCostear(unArtefacto)) {
+			self.restarNMonedas(unArtefacto.Precio())
 			self.agregarArtefacto(unArtefacto)
 		}
 	}
@@ -58,7 +65,7 @@ object fuerzaOscura{
 	var property valorFuerzaOscura = 5
 	
 	method eclipse() {
-		valorFuerzaOscura =  valorFuerzaOscura*2
+		self.valorFuerzaOscura(self.valorFuerzaOscura())
 	}
 	
 }
@@ -70,7 +77,7 @@ class Logos{
 	
 	var property valorMultiplicador
 	
-	method poder() = valorMultiplicador * self.nombre().length()
+	method poder() = self.valorMultiplicador() * self.nombre().length()
 	
 	method unidadesRefuerzo() = self.poder()
 	
@@ -156,8 +163,8 @@ object collarDivino{
 
 class MascaraOscura {
 	var property indiceDeOscuridad
-	var property valorMinimo = 4
-	method unidadesDeLucha() = valorMinimo.max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
+	method valorMinimo() = 4
+	method unidadesDeLucha() = self.valorMinimo().max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
 	method estaVinculado() = false	
 }
 
@@ -187,7 +194,8 @@ object espejoFantastico{
 
 
 class Armadura{
-	var property unidadesBaseDeLucha
+	const property unidadesBaseDeLucha
+	
 	var property refuerzo = ninguno
 	
 	method unidadesDeLuchadelRefuerzo(portador) = if(self.refuerzo().estaVinculado()){return self.refuerzo().unidadesRefuerzo(portador)}else{return self.refuerzo().unidadesRefuerzo()}
@@ -196,7 +204,7 @@ class Armadura{
 	
 	method estaVinculado() = true
 	
-	method precio() = if(refuerzo.precioVinculado()){return refuerzo.precioRefuerzo(self)}else{return refuerzo.precioRefuerzo()}
+	method precio() = if(self.refuerzo().precioVinculado()){return self.refuerzo().precioRefuerzo(self)}else{return self.refuerzo().precioRefuerzo()}
 }
 
 
