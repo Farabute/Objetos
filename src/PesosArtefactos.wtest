@@ -1,4 +1,5 @@
 import Tp_objetos.*
+import Artefactos.*
 
 describe "Tests de Pesos de Artefactos"{
 	

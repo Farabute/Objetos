@@ -1,4 +1,6 @@
 import Tp_objetos.*
+import Artefactos.*
+
 
 describe "Tests de Hechiceria" {
 	const rolando
