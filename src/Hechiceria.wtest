@@ -2,10 +2,14 @@ import Tp_objetos.*
 
 describe "Tests de Hechiceria" {
 	const rolando
+	const furibunda
 	var espectroMalefico
+	var unHechizoComercial
 	fixture {
 		espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
+		unHechizoComercial = new HechizoComercial()
 		rolando = new Personaje(hechizoPreferido = espectroMalefico)
+		furibunda = new Personaje(hechizoPreferido = unHechizoComercial)
 	}
 	
 	test "Si Rolando tiene el espectro malefico, tiene 56 puntos de nivel de hechiceria" {
@@ -43,5 +47,13 @@ describe "Tests de Hechiceria" {
 
 	test "El hechizo basico no es poderoso"{
 		assert.notThat(hechizoBasico.esPoderoso())
+	}
+	
+	test "El nivel de hechiceria de Furibunda es 29"{
+		assert.equals(furibunda.nivelDeHechiceria(),29)
+	}
+	
+	test "El hechizo comercial no es poderoso"{
+		assert.notThat(unHechizoComercial.esPoderoso())
 	}
 }
