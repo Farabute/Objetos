@@ -1,0 +1,30 @@
+import Tp_objetos.*
+
+describe "Tests de NPCs"{
+	
+	var mascaraClara
+	var navi
+	var ashleyGraham
+	
+fixture{
+	
+	mascaraClara = new MascaraOscura(indiceDeOscuridad = 0)
+	ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
+	
+}
+
+	test "La habilidad de lucha de Navi es 1"{
+		navi = new NPC(dificultad = new Facil())
+		assert.equals(navi.habilidadParaLucha(), 1)
+
+	}
+	
+	test "La habilidad de lucha de Ashley Graham es 18"{
+		assert.equals(ashleyGraham.habilidadParaLucha(), 18)
+	}
+	
+	test "Si se cambia la dificultad de Ashley Graham a Dificil, su habilidad de lucha es 36"{
+		ashleyGraham.dificultad(new Dificil())
+		assert.equals(ashleyGraham.habilidadParaLucha(), 36)
+	}
+}	
