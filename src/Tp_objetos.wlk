@@ -4,6 +4,7 @@ class Personaje{
 	var property valorBaseLucha = 1
 	var property artefactos = []
 	var property monedas = 100
+	const property pesoMaximo = 200
 	
 	method valorBaseNivel() = 3
 	
@@ -54,7 +55,7 @@ class Personaje{
 	
 	method compraArtefacto(unArtefacto) {
 		if (self.podesCostear(unArtefacto)) {
-			self.restarNMonedas(unArtefacto.Precio())
+			self.restarNMonedas(unArtefacto.precio())
 			self.agregarArtefacto(unArtefacto)
 		}
 	}
@@ -65,11 +66,27 @@ object fuerzaOscura{
 	var property valorFuerzaOscura = 5
 	
 	method eclipse() {
-		self.valorFuerzaOscura(self.valorFuerzaOscura())
+		self.valorFuerzaOscura(self.valorFuerzaOscura() * 2)
 	}
 	
 }
 
+class NPC inherits Personaje{
+	var property dificultad
+	override method habilidadParaLucha() = super() * self.dificultad().valorMultiplicador()
+}
+
+class Facil{
+	method valorMultiplicador() = 1
+}
+
+class Moderado{
+	method valorMultiplicador() = 2
+}
+
+class Dificil{
+	method valorMultiplicador() = 4
+}
 
 /** Hechizos */
 class Logos{
@@ -93,6 +110,8 @@ class Logos{
 	
 	method precioRefuerzo(armadura) = armadura.unidadesBaseDeLucha() + self.precio()
 	
+	method peso() = if(self.poder().even()){return 2}else{return 1}
+
 }
 
 
@@ -114,6 +133,13 @@ object hechizoBasico{
 	
 	method precioRefuerzo(armadura) = armadura.unidadesBaseDeLucha() + self.precio()
 	
+}
+
+class HechizoComercial inherits Logos{
+	var property porcentaje = 0.2
+	override method nombre() = "el hechizo comercial"
+	override method valorMultiplicador() = 2
+	override method poder() = super() * self.porcentaje()
 }
 
 class LibroDeHechizos{
@@ -144,28 +170,41 @@ class LibroDeHechizos{
 
 /** Artefactos */
 
-class Arma{
+class Artefacto{
+	const hoy = new Date()
+	const property peso = 0
+	const property diaDeCompra = hoy
+	method diasDesdeCompra() = hoy - diaDeCompra 
+	method factorDeCorreccion() = 1.min(self.diasDesdeCompra() / 1000)
+	method pesoTotal() = self.peso() - self.factorDeCorreccion()
+}
+
+class Arma inherits Artefacto{
 	method unidadesDeLucha() = 3
 	method estaVinculado() = false
 	method precio() = 5 * self.unidadesDeLucha()
 }
 
 
-object collarDivino{
-	var property perlas = 0
+object collarDivino inherits Artefacto{
+	var property perlas = 5
 	
 	method unidadesDeLucha() = self.perlas()
 	
 	method estaVinculado() = false
 	
 	method precio() = 2 * self.perlas()
+	
+	override method pesoTotal() = super() + 0.5 * self.perlas()
 }
 
-class MascaraOscura {
-	var property indiceDeOscuridad
-	method valorMinimo() = 4
+class MascaraOscura inherits Artefacto{
+	var property indiceDeOscuridad = 1
+	var property valorMinimo = 4
 	method unidadesDeLucha() = self.valorMinimo().max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
-	method estaVinculado() = false	
+	method estaVinculado() = false
+	method pesoExtra() = 0.max(self.unidadesDeLucha() - 3)
+	override method pesoTotal() = super() + self.pesoExtra()
 }
 
 object espejoFantastico{
@@ -193,8 +232,8 @@ object espejoFantastico{
 }
 
 
-class Armadura{
-	const property unidadesBaseDeLucha
+class Armadura inherits Artefacto{
+	const property unidadesBaseDeLucha = 3
 	
 	var property refuerzo = ninguno
 	
@@ -205,6 +244,8 @@ class Armadura{
 	method estaVinculado() = true
 	
 	method precio() = if(self.refuerzo().precioVinculado()){return self.refuerzo().precioRefuerzo(self)}else{return self.refuerzo().precioRefuerzo()}
+	
+	override method pesoTotal() = super() + self.refuerzo().peso()
 }
 
 
@@ -215,6 +256,7 @@ class CotaDeMalla{
 	method estaVinculado() = false
 	method precioVinculado() = false
 	method precioRefuerzo() = self.unidadesRefuerzo() / 2
+	method peso() = 1
 }
 
 
@@ -223,6 +265,7 @@ object bendicion{
 	method precioVinculado() = true
 	method unidadesRefuerzo(luchador) = luchador.nivelDeHechiceria()
 	method precioRefuerzo(armadura) = armadura.unidadesBaseDeLucha()
+	method peso() = 0
 }
 
 object ninguno{
@@ -230,4 +273,5 @@ object ninguno{
 	method precioVinculado() = false
 	method unidadesRefuerzo() = 0
 	method precioRefuerzo() = 2
+	method peso() = 0
 }
