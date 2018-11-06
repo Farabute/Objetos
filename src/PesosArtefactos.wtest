@@ -12,15 +12,18 @@ describe "Tests de Pesos de Artefactos"{
 	var espadaComun = new Arma(peso = 5, diaDeCompra = hoy.minusDays(50))
 	var mascaraOscura = new MascaraOscura(peso = 3, valorMinimo = 1)
 	var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0, peso = 2, valorMinimo = 1)
-	var armaduraConCotaDeMalla = new Armadura(peso = 10, refuerzo = new CotaDeMalla())
+	var collarDivino = new CollarDivino()
 	var hechizoComercial = new HechizoComercial()
 	var espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
 	var armaduraHechizoPar = new Armadura(peso = 12, refuerzo = hechizoComercial)
 	var armaduraHechizoImpar = new Armadura(peso = 12, refuerzo = espectroMalefico)
 	var armaduraSinRefuerzo = new Armadura(peso = 12, refuerzo = ninguno)
+	var armaduraConCotaDeMalla = new Armadura(peso = 10, refuerzo = new CotaDeMalla())
 	var navi = new NPC(dificultad = new Facil())
 	var ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
-	var collarDivino = new CollarDivino()
+	var merlin = new Personaje(monedas = 100, pesoMaximo = 10)
+	var ursula = new Personaje(monedas = 100, pesoMaximo = 200,artefactos = [mascaraOscura,armaduraConCotaDeMalla])
+	var mockHnos = new ComercianteRegistrado()
 
 	test "El peso de la espada vieja es 6"{
 

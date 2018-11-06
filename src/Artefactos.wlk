@@ -34,6 +34,7 @@ class MascaraOscura inherits Artefacto{
 	method unidadesDeLucha(duenio) = self.valorMinimo().max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
 	method pesoExtra() = 0.max(self.unidadesDeLucha(self) - 3)
 	override method pesoTotal() = super() + self.pesoExtra()
+	method precio() = 10 * self.indiceDeOscuridad()
 }
 
 object espejoFantastico{

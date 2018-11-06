@@ -67,6 +67,17 @@ class Personaje{
 	self.restarNMonedas(unArtefacto.precio())
 	self.agregarArtefacto(unArtefacto)
 	}
+	
+//	method compraleA(unComerciante, unArtefacto){
+//		if (!self.podesCostear(unArtefacto)) {
+//			throw new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
+//		}
+//		if (!self.podesCargarArtefacto(unArtefacto)) {
+//			throw new ExcepcionPorExcesoDePeso("El luchador no puede cargar con el objeto seleccionado, libere su inventario.")
+//		}
+//		self.restarNMonedas(unComerciante.impuestoAdicional()+unArtefacto.precio())
+//		self.agregarArtefacto(unArtefacto)
+//	}
 
 }
 
