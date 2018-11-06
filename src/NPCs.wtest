@@ -1,18 +1,14 @@
 import Tp_objetos.*
 import Artefactos.*
+import LibroYHechizos.*
+import Personajes.*
 
 describe "Tests de NPCs"{
 	
-	var mascaraClara
+	var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0)
 	var navi
-	var ashleyGraham
-	
-fixture{
-	
-	mascaraClara = new MascaraOscura(indiceDeOscuridad = 0)
-	ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
-	
-}
+	var ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
+
 
 	test "La habilidad de lucha de Navi es 1"{
 		navi = new NPC(dificultad = new Facil())

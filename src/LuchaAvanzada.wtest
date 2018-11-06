@@ -1,24 +1,20 @@
 import Tp_objetos.*
 import Artefactos.*
+import LibroYHechizos.*
+import Personajes.*
 
 describe "Tests de Lucha y Hechiceria Avanzada" {
-	const rolando
-	var espectroMalefico
-	var mascaraOscura
-	var espadaDelDestino
-	var armadura
+	
+	var espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
+	var mascaraOscura = new MascaraOscura(indiceDeOscuridad = 1)
+	var espadaDelDestino = new Arma()
+	var armadura = new Armadura(unidadesBaseDeLucha = 2)
+	var collarDivino = new CollarDivino(perlas = 5)
 	var cotaDeMalla
 	var libroDeHechizos
 	var armaduraExtra
-fixture {
-		espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
-		rolando = new Personaje(hechizoPreferido = espectroMalefico)
-		mascaraOscura = new MascaraOscura(indiceDeOscuridad = 1)
-		espadaDelDestino = new Arma()
-		armadura = new Armadura(unidadesBaseDeLucha = 2)
-		collarDivino.perlas(5)
-		rolando.artefactos([collarDivino,mascaraOscura,espadaDelDestino,espejoFantastico,armadura])
-	}
+	var rolando = new Personaje(hechizoPreferido = espectroMalefico,artefactos = [collarDivino,mascaraOscura,espadaDelDestino,espejoFantastico,armadura])
+
 	
 	test "Si tiene 5 artefactos, Rolando esta cargado" {
 

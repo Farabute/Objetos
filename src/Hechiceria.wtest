@@ -1,19 +1,14 @@
 import Tp_objetos.*
 import Artefactos.*
-
+import LibroYHechizos.*
+import Personajes.*
 
 describe "Tests de Hechiceria" {
-	const rolando
-	const furibunda
-	var espectroMalefico
-	var unHechizoComercial
-	fixture {
-		espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
-		unHechizoComercial = new HechizoComercial()
-		rolando = new Personaje(hechizoPreferido = espectroMalefico)
-		furibunda = new Personaje(hechizoPreferido = unHechizoComercial)
-	}
-	
+	const rolando = new Personaje(hechizoPreferido = espectroMalefico)
+	const furibunda = new Personaje(hechizoPreferido = unHechizoComercial)
+	var espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
+	var unHechizoComercial = new HechizoComercial()
+
 	test "Si Rolando tiene el espectro malefico, tiene 56 puntos de nivel de hechiceria" {
 
 		assert.equals(rolando.nivelDeHechiceria(),56)
