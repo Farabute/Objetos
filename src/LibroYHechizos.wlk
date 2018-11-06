@@ -8,7 +8,7 @@ class Logos{
 	
 	var property valorMultiplicador
 	
-	method poder() = self.valorMultiplicador() * self.nombre().length()
+	method poder() = self.valorMultiplicador() * self.nombre().size()
 	
 	method unidadesRefuerzo(luchador) = self.poder()
 	
@@ -49,7 +49,7 @@ class HechizoComercial inherits Logos{
 class LibroDeHechizos{
 	var property hechizos = []
 	
-	method hechizosValidos() = self.hechizos().remove(self)
+	method hechizosValidos() = self.hechizos().filter({hechizo => hechizo != self})
 	
 	method agregarHechizo(unHechizo){
 		self.hechizos().add(unHechizo)
@@ -65,7 +65,7 @@ class LibroDeHechizos{
 	
 	method hechizosPoderosos() = self.hechizosValidos().filter({hechizo => hechizo.esPoderoso()})
 	
-	method poder() = (self.hechizosPoderosos()).sum({hechizo => hechizo.poder()})
+	method poder() = self.hechizosPoderosos().sum({hechizo => hechizo.poder()})
 	
 	method precio() = 10 * self.hechizos().size() + self.poder()
 }

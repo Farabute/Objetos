@@ -4,10 +4,11 @@ import LibroYHechizos.*
 import Personajes.*
 
 describe "Tests de Hechiceria" {
-	const rolando = new Personaje(hechizoPreferido = espectroMalefico)
-	const furibunda = new Personaje(hechizoPreferido = unHechizoComercial)
+	
 	var espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
 	var unHechizoComercial = new HechizoComercial()
+	const rolando = new Personaje(hechizoPreferido = espectroMalefico)
+	const furibunda = new Personaje(hechizoPreferido = unHechizoComercial)	
 
 	test "Si Rolando tiene el espectro malefico, tiene 56 puntos de nivel de hechiceria" {
 

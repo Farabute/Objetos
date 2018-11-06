@@ -1,20 +1,17 @@
 import Tp_objetos.*
+import Artefactos.*
+import LibroYHechizos.*
+import Personajes.*
 
 describe "Tests de Comercio"{
 	
-	var alacachulaCachicomula
-	var armaduraConAlacachula
-	const xenia
-	const thor
-	const loki
-	
-fixture{
-	alacachulaCachicomula = new Logos(nombre = "alacachula cachicomula", valorMultiplicador = 1)
-	xenia = new Personaje(hechizoPreferido = alacachulaCachicomula)
-	thor = new Personaje(hechizoPreferido = hechizoBasico)
-	loki = new Personaje(hechizoPreferido = hechizoBasico, monedas = 5)
-	armaduraConAlacachula = new Armadura(unidadesBaseDeLucha = 2, refuerzo = alacachulaCachicomula)
-}
+	var alacachulaCachicomula = new Logos(nombre = "alacachula cachicomula", valorMultiplicador = 1)
+	var armaduraConAlacachula = new Armadura(unidadesBaseDeLucha = 2, refuerzo = alacachulaCachicomula)
+	const xenia = new Personaje(hechizoPreferido = alacachulaCachicomula)
+	const thor = new Personaje(hechizoPreferido = hechizoBasico)
+	const loki = new Personaje(hechizoPreferido = hechizoBasico, monedas = 5)
+	var collarDivino = new CollarDivino(perlas = 5)
+
 
 	test "El precio del hechizo Alacachula es de 22"{
 
@@ -38,9 +35,12 @@ fixture{
 		assert.equals(thor.monedas(), 90)
 	}
 	
-	test "Si Loki quiere canjear su hechizo por Alacachula, no puede"{
-		loki.canjeaHechizo(alacachulaCachicomula)
-		assert.equals(loki.monedas(), 5)
+	test "Si Loki quiere canjear su hechizo por Alacachula,  no puede y arroja excepcion por falta de monedas"{
+		const excepcionPorFaltaDeMonedas = new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
+		const bloqueQueDebeExplotar = {
+			loki.compraArtefacto(alacachulaCachicomula)
+		}
+		assert.throwsExceptionLike(excepcionPorFaltaDeMonedas, bloqueQueDebeExplotar)
 	}
 	
 	test "Si Xenia compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5, le quedan 70.5 monedas"{
@@ -62,7 +62,6 @@ fixture{
 		espada = new Arma()
 		cotaDeMalla = new CotaDeMalla(unidadesRefuerzo = 5)
 		xenia.compraArtefacto(espada)
-		collarDivino.perlas(5)
 		xenia.compraArtefacto(collarDivino)
 		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = ninguno))
 		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = cotaDeMalla))
@@ -76,9 +75,12 @@ fixture{
 		assert.equals(thor.monedas(), 74)
 	}
 	
-	test "Si Loki quiere comprar el espejo, no puede"{
-		loki.compraArtefacto(espejoFantastico)
-		assert.equals(loki.monedas(), 5)
+	test "Si Loki quiere comprar el espejo, no puede y arroja excepcion por falta de monedas"{
+		const excepcionPorFaltaDeMonedas = new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
+		const bloqueQueDebeExplotar = {
+			loki.compraArtefacto(espejoFantastico)
+		}
+		assert.throwsExceptionLike(excepcionPorFaltaDeMonedas, bloqueQueDebeExplotar)
 	}
 	
 	test "Si Xenia canjea su hechizo por un libro con el hechizo basico y Alacachula, le quedan 69 monedas"{
