@@ -10,11 +10,14 @@ class Artefacto{
 	method diasDesdeCompra() = self.hoy() - self.diaDeCompra ()
 	method factorDeCorreccion() = 1.min(self.diasDesdeCompra() / 1000)
 	method pesoTotal() = 0.max(self.peso() - self.factorDeCorreccion())
+	method precio() = 0
+	method costo(personaje) = self.precio()
+	method sosAdquirido(personaje) = personaje.agregarArtefacto(self)
 }
 
 class Arma inherits Artefacto{
 	method unidadesDeLucha(duenio) = 3
-	method precio() = 5 * self.unidadesDeLucha(self)
+	override method precio() = 5 * self.unidadesDeLucha(self)
 }
 
 
@@ -23,7 +26,7 @@ class CollarDivino inherits Artefacto{
 	
 	method unidadesDeLucha(duenio) = self.perlas()
 	
-	method precio() = 2 * self.perlas()
+	override method precio() = 2 * self.perlas()
 	
 	override method pesoTotal() = super() + 0.5 * self.perlas()
 }
@@ -34,7 +37,7 @@ class MascaraOscura inherits Artefacto{
 	method unidadesDeLucha(duenio) = self.valorMinimo().max(fuerzaOscura.valorFuerzaOscura() * self.indiceDeOscuridad() / 2)
 	method pesoExtra() = 0.max(self.unidadesDeLucha(self) - 3)
 	override method pesoTotal() = super() + self.pesoExtra()
-	method precio() = 10 * self.indiceDeOscuridad()
+	override method precio() = 10 * self.indiceDeOscuridad()
 }
 
 object espejoFantastico{
@@ -48,6 +51,7 @@ object espejoFantastico{
 	}
 	
 	method precio() = 90
+	method costo(personaje) = self.precio()
 }
 
 
@@ -60,7 +64,7 @@ class Armadura inherits Artefacto{
 		
 	method unidadesDeLucha(portador) = self.unidadesBaseDeLucha() + self.unidadesDeLuchaDelRefuerzo(portador)
 	
-	method precio() = self.refuerzo().precioRefuerzo(self)
+	override method precio() = self.refuerzo().precioRefuerzo(self)
 	
 	override method pesoTotal() = super() + self.refuerzo().pesoRefuerzo()
 }
