@@ -17,7 +17,7 @@ class Artefacto{
 
 class Arma inherits Artefacto{
 	method unidadesDeLucha(duenio) = 3
-	override method precio() = 5 * self.unidadesDeLucha(self)
+	override method precio() = 5 * self.peso()
 }
 
 
