@@ -7,80 +7,93 @@ import Personajes.*
 describe "Tests de Pesos de Artefactos"{
 	
 	const hoy = new Date()
-	var espadaVieja = new Arma(peso = 7, diaDeCompra = new Date(7,5,2006))
-	var espadaNueva = new Arma(peso = 4, diaDeCompra = hoy)
-	var espadaComun = new Arma(peso = 5, diaDeCompra = hoy.minusDays(50))
-	var mascaraOscura = new MascaraOscura(peso = 3, valorMinimo = 1)
-	var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0, peso = 2, valorMinimo = 1)
-	var collarDivino = new CollarDivino()
-	var hechizoComercial = new HechizoComercial()
-	var espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
-	var armaduraHechizoPar = new Armadura(peso = 12, refuerzo = hechizoComercial)
-	var armaduraHechizoImpar = new Armadura(peso = 12, refuerzo = espectroMalefico)
-	var armaduraSinRefuerzo = new Armadura(peso = 12, refuerzo = ninguno)
-	var armaduraConCotaDeMalla = new Armadura(peso = 10, refuerzo = new CotaDeMalla())
-	var navi = new NPC(dificultad = new Facil())
-	var ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
-	var merlin = new Personaje(monedas = 100, pesoMaximo = 10)
-	var ursula = new Personaje(monedas = 100, pesoMaximo = 200,artefactos = [mascaraOscura,armaduraConCotaDeMalla])
-	var mockHnos = new ComercianteRegistrado()
 
 	test "El peso de la espada vieja es 6"{
-
+		var espadaVieja = new Arma(peso = 7, diaDeCompra = new Date(7,5,2006))
 		assert.equals(espadaVieja.pesoTotal(), 6)
-
 	}
 	
 	test "El peso de la espada nueva es 4"{
-		
+		var espadaNueva = new Arma(peso = 4, diaDeCompra = hoy)
 		assert.equals(espadaNueva.pesoTotal(), 4)
 	}
 	
 	test "El peso de la espada comun es 4.95"{
-		
+		var espadaComun = new Arma(peso = 5, diaDeCompra = hoy.minusDays(50))
 		assert.equals(espadaComun.pesoTotal(), 4.95)
 	}
 	
 	test "El peso del collar divino es 2.5"{
+		var collarDivino = new CollarDivino()
 		assert.equals(collarDivino.pesoTotal(), 2.5)
 	}
 	
 	test "El peso de la mascara oscura es 3"{
-
+		var mascaraOscura = new MascaraOscura(peso = 3, valorMinimo = 1)
 		assert.equals(mascaraOscura.pesoTotal(), 3)
 	}
 	
 	test "Si ocurre un eclipse, el peso de la mascara oscura es 5"{
-		
+		var mascaraOscura = new MascaraOscura(peso = 3, valorMinimo = 1)
 		fuerzaOscura.eclipse()
 		assert.equals(mascaraOscura.pesoTotal(), 5)
 	}
 
 	test "El peso de la mascara clara es 2"{
-		
+		var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0, peso = 2, valorMinimo = 1)
 		assert.equals(mascaraClara.pesoTotal(), 2)
 	}
 	
 	test "El peso total de la armadura con cota de malla es 11"{
-		
+		var armaduraConCotaDeMalla = new Armadura(peso = 10, refuerzo = new CotaDeMalla())
 		assert.equals(armaduraConCotaDeMalla.pesoTotal(), 11)
 	}
 	
 	test "El peso total de la armadura con hechizo par es 14"{
-		
-		
+		var hechizoComercial = new HechizoComercial()
+		var armaduraHechizoPar = new Armadura(peso = 12, refuerzo = hechizoComercial)
 		assert.equals(armaduraHechizoPar.pesoTotal(), 14)
 	}
 	
 	test "El peso total de la armadura con hechizo impar es 13"{
-		
-		
+		var espectroMalefico = new Logos(nombre = "espectro malefico", valorMultiplicador = 1)
+		var armaduraHechizoImpar = new Armadura(peso = 12, refuerzo = espectroMalefico)
 		assert.equals(armaduraHechizoImpar.pesoTotal(), 13)
 	}
 	
 	test "El peso total de la armadura sin refuerzo es 12"{
-		
+		var armaduraSinRefuerzo = new Armadura(peso = 12, refuerzo = ninguno)
 		assert.equals(armaduraSinRefuerzo.pesoTotal(), 12)
+	}
+	
+	test "Si Merlin le compra la mascara clara y la oscura a Mock Hnos, su peso total es de 5"{
+		var merlin = new Personaje(monedas = 100, pesoMaximo = 10)
+		var mockHnos = new Comerciante(tipoDeComerciante = new ComercianteIndependiente(comision = 0))
+		var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0, peso = 2, valorMinimo = 1)
+		var mascaraOscura = new MascaraOscura(peso = 3, valorMinimo = 1)
+		merlin.compraleA(mockHnos, mascaraClara)
+		merlin.compraleA(mockHnos, mascaraOscura)
+		assert.equals(merlin.cargaDePesoActual(), 5)
+	}
+	
+	test "Si Merlin le quiere comprar la armadura con hechizo par a Mock Hnos, no puede y arroja excepcion por exceso de peso"{
+		var merlin = new Personaje(monedas = 100, pesoMaximo = 10)
+		var mockHnos = new Comerciante(tipoDeComerciante = new ComercianteIndependiente(comision = 0))
+		var hechizoComercial = new HechizoComercial()
+		var armaduraHechizoPar = new Armadura(peso = 12, refuerzo = hechizoComercial)
+		const excepcionPorExcesoDePeso = new ExcepcionPorExcesoDePeso("El luchador no puede cargar con el objeto seleccionado, libere su inventario.")
+		const bloqueQueDebeExplotar = {
+			merlin.compraleA(mockHnos, armaduraHechizoPar)
+		}
+		assert.throwsExceptionLike(excepcionPorExcesoDePeso, bloqueQueDebeExplotar)
+	}
+	
+	test "Si Ursula se desprende de la armadura con cota de malla, su peso total es de 3"{
+		var mascaraOscura = new MascaraOscura(peso = 3, valorMinimo = 1)
+		var armaduraConCotaDeMalla = new Armadura(peso = 10, refuerzo = new CotaDeMalla())
+		var ursula = new Personaje(monedas = 100, pesoMaximo = 200, artefactos = [mascaraOscura,armaduraConCotaDeMalla])
+		ursula.removerArtefacto(armaduraConCotaDeMalla)
+		assert.equals(ursula.cargaDePesoActual(), 3)
 	}
 	
 }	
