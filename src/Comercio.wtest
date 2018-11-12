@@ -41,7 +41,7 @@ describe "Tests de Comercio"{
 		assert.throwsExceptionLike(excepcionPorFaltaDeMonedas, bloqueQueDebeExplotar)
 	}
 	
-	test "Si Xenia le compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5 a Mock Hnos, le quedan 70.5 monedas"{
+	test "Si Xenia le compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5 a Mock Hnos, le quedan 85.5 monedas"{
 		var espada = new Arma()
 		var cotaDeMalla = new CotaDeMalla(unidadesRefuerzo = 5)
 		var collarDivino = new CollarDivino()
@@ -50,7 +50,7 @@ describe "Tests de Comercio"{
 		xenia.compraleA(mockHnos, collarDivino)
 		xenia.compraleA(mockHnos, new Armadura(unidadesBaseDeLucha = 2, refuerzo = ninguno))
 		xenia.compraleA(mockHnos, new Armadura(unidadesBaseDeLucha = 2, refuerzo = cotaDeMalla))
-		assert.equals(xenia.monedas(), 70.5)
+		assert.equals(xenia.monedas(), 85.5)
 	}
 	
 	test "Si Xenia le compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5 a Mock Hnos, tiene 4 artefactos"{
