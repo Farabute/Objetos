@@ -10,8 +10,6 @@ describe "Tests de Comercio"{
 	const xenia = new Personaje(hechizoPreferido = alacachulaCachicomula)
 	const thor = new Personaje(hechizoPreferido = hechizoBasico)
 	const loki = new Personaje(hechizoPreferido = hechizoBasico, monedas = 5)
-	var collarDivino = new CollarDivino(perlas = 5)
-
 
 	test "El precio del hechizo Alacachula es de 22"{
 
@@ -38,54 +36,52 @@ describe "Tests de Comercio"{
 	test "Si Loki quiere canjear su hechizo por Alacachula,  no puede y arroja excepcion por falta de monedas"{
 		const excepcionPorFaltaDeMonedas = new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
 		const bloqueQueDebeExplotar = {
-			loki.compraArtefacto(alacachulaCachicomula)
+			loki.compra(alacachulaCachicomula)
 		}
 		assert.throwsExceptionLike(excepcionPorFaltaDeMonedas, bloqueQueDebeExplotar)
 	}
 	
-	test "Si Xenia compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5, le quedan 70.5 monedas"{
-		var espada
-		var cotaDeMalla
-		espada = new Arma()
-		cotaDeMalla = new CotaDeMalla(unidadesRefuerzo = 5)
-		xenia.compraArtefacto(espada)
-		collarDivino.perlas(5)
-		xenia.compraArtefacto(collarDivino)
-		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = ninguno))
-		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = cotaDeMalla))
+	test "Si Xenia le compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5 a Mock Hnos, le quedan 70.5 monedas"{
+		var espada = new Arma()
+		var cotaDeMalla = new CotaDeMalla(unidadesRefuerzo = 5)
+		var collarDivino = new CollarDivino()
+		var mockHnos = new Comerciante(tipoDeComerciante = new ComercianteIndependiente(comision = 0))
+		xenia.compraleA(mockHnos, espada)
+		xenia.compraleA(mockHnos, collarDivino)
+		xenia.compraleA(mockHnos, new Armadura(unidadesBaseDeLucha = 2, refuerzo = ninguno))
+		xenia.compraleA(mockHnos, new Armadura(unidadesBaseDeLucha = 2, refuerzo = cotaDeMalla))
 		assert.equals(xenia.monedas(), 70.5)
 	}
 	
-	test "Si Xenia compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5, tiene 4 artefactos"{
-		var espada
-		var cotaDeMalla
-		espada = new Arma()
-		cotaDeMalla = new CotaDeMalla(unidadesRefuerzo = 5)
-		xenia.compraArtefacto(espada)
-		xenia.compraArtefacto(collarDivino)
-		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = ninguno))
-		xenia.compraArtefacto(new Armadura(unidadesBaseDeLucha = 2, refuerzo = cotaDeMalla))
+	test "Si Xenia le compra una espada, un collar de 5 perlas, una armadura sin refuerzo y otra con cota de malla de valor 5 a Mock Hnos, tiene 4 artefactos"{
+		var espada = new Arma()
+		var cotaDeMalla = new CotaDeMalla(unidadesRefuerzo = 5)
+		var collarDivino = new CollarDivino()
+		var mockHnos = new Comerciante(tipoDeComerciante = new ComercianteIndependiente(comision = 0))
+		xenia.compraleA(mockHnos, espada)
+		xenia.compraleA(mockHnos, collarDivino)
+		xenia.compraleA(mockHnos, new Armadura(unidadesBaseDeLucha = 2, refuerzo = ninguno))
+		xenia.compraleA(mockHnos, new Armadura(unidadesBaseDeLucha = 2, refuerzo = cotaDeMalla))
 		assert.equals(xenia.artefactos().size(), 4)
 	}
 	
 	test "Si Thor compra una armadura con bendicion y una armadura reforzada con Alacachula, le quedan 74 monedas"{
 		var armaduraConBendicion = new Armadura(unidadesBaseDeLucha = 2, refuerzo = bendicion)
-		thor.compraArtefacto(armaduraConBendicion)
-		thor.compraArtefacto(armaduraConAlacachula)
+		thor.compra(armaduraConBendicion)
+		thor.compra(armaduraConAlacachula)
 		assert.equals(thor.monedas(), 74)
 	}
 	
 	test "Si Loki quiere comprar el espejo, no puede y arroja excepcion por falta de monedas"{
 		const excepcionPorFaltaDeMonedas = new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
 		const bloqueQueDebeExplotar = {
-			loki.compraArtefacto(espejoFantastico)
+			loki.compra(espejoFantastico)
 		}
 		assert.throwsExceptionLike(excepcionPorFaltaDeMonedas, bloqueQueDebeExplotar)
 	}
 	
 	test "Si Xenia canjea su hechizo por un libro con el hechizo basico y Alacachula, le quedan 69 monedas"{
-		var libroDeHechizos
-		libroDeHechizos = new LibroDeHechizos()
+		var libroDeHechizos = new LibroDeHechizos()
 		libroDeHechizos.agregarHechizos([hechizoBasico,alacachulaCachicomula])
 		xenia.canjeaHechizo(libroDeHechizos)
 		assert.equals(xenia.monedas(), 69)
