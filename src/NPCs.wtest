@@ -5,22 +5,21 @@ import Personajes.*
 
 describe "Tests de NPCs"{
 	
-	var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0)
-	var navi
-	var ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
-
-
 	test "La habilidad de lucha de Navi es 1"{
-		navi = new NPC(dificultad = new Facil())
+		var navi = new NPC(dificultad = new Facil())
 		assert.equals(navi.habilidadParaLucha(), 1)
 
 	}
 	
 	test "La habilidad de lucha de Ashley Graham es 18"{
+		var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0)
+		var ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
 		assert.equals(ashleyGraham.habilidadParaLucha(), 18)
 	}
 	
 	test "Si se cambia la dificultad de Ashley Graham a Dificil, su habilidad de lucha es 36"{
+		var mascaraClara = new MascaraOscura(indiceDeOscuridad = 0)
+		var ashleyGraham = new NPC(valorBaseLucha = 5, artefactos = [mascaraClara], dificultad = new Moderado())
 		ashleyGraham.dificultad(new Dificil())
 		assert.equals(ashleyGraham.habilidadParaLucha(), 36)
 	}
