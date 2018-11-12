@@ -51,34 +51,28 @@ class Personaje{
 		self.monedas(self.monedas() - unNumero)
 	}
 	
-	method podesCostear(unArtefacto) = self.monedas() >= unArtefacto.precio()
+	method podesCostear(unItem, unComerciante) = self.monedas() >= unComerciante.valorCobrado(self, unItem)
 	
 	method cargaDePesoActual() = self.artefactos().sum({artefacto => artefacto.peso()})
 	
 	method podesCargarArtefacto(unArtefacto) = (unArtefacto.peso() + self.cargaDePesoActual()) <= self.pesoMaximo()
 	
-	method compraArtefacto(unArtefacto) {
-		if (!self.podesCostear(unArtefacto)) {
-			throw new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
-		}
-		if (!self.podesCargarArtefacto(unArtefacto)) {
-			throw new ExcepcionPorExcesoDePeso("El luchador no puede cargar con el objeto seleccionado, libere su inventario.")
-		}
-	self.restarNMonedas(unArtefacto.precio())
-	self.agregarArtefacto(unArtefacto)
+	method compra(unArtefacto){
+		const comercianteSinComision = new Comerciante(tipoDeComerciante = new ComercianteIndependiente(comision = 0))
+		self.compraleA(comercianteSinComision, unArtefacto)
 	}
 	
-//	method compraleA(unComerciante, unArtefacto){
-//		if (!self.podesCostear(unArtefacto)) {
-//			throw new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
-//		}
-//		if (!self.podesCargarArtefacto(unArtefacto)) {
-//			throw new ExcepcionPorExcesoDePeso("El luchador no puede cargar con el objeto seleccionado, libere su inventario.")
-//		}
-//		self.restarNMonedas(unComerciante.impuestoAdicional()+unArtefacto.precio())
-//		self.agregarArtefacto(unArtefacto)
-//	}
-
+	method compraleA(unComerciante, unItem){
+		if (!self.podesCostear(unItem, unComerciante)) {
+			throw new ExcepcionPorFaltaDeMonedas("El luchador no dispone de las monedas suficientes para realizar la compra.")
+		}
+		if (!self.podesCargarArtefacto(unItem)) {
+			throw new ExcepcionPorExcesoDePeso("El luchador no puede cargar con el objeto seleccionado, libere su inventario.")
+		}
+		self.restarNMonedas(unComerciante.valorCobrado(self, unItem))
+		unItem.sosAdquirido(self)
+	}
+	
 }
 
 object fuerzaOscura{
