@@ -39,7 +39,7 @@ class HechizoComercial inherits Logos{
 	override method poder() = super() * self.porcentaje()
 }
 
-class LibroDeHechizos{
+class LibroDeHechizos inherits Hechizo{
 	var property hechizos = []
 	
 	method hechizosValidos() = self.hechizos().filter({hechizo => hechizo != self})
@@ -58,7 +58,7 @@ class LibroDeHechizos{
 	
 	method hechizosPoderosos() = self.hechizosValidos().filter({hechizo => hechizo.esPoderoso()})
 	
-	method poder() = self.hechizosPoderosos().sum({hechizo => hechizo.poder()})
+	override method poder() = self.hechizosPoderosos().sum({hechizo => hechizo.poder()})
 	
-	method precio() = 10 * self.hechizos().size() + self.poder()
+	override method precio() = super() + 10 * self.hechizos().size()
 }
